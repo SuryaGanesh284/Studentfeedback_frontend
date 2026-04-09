@@ -58,8 +58,38 @@ const [typeFilter, setTypeFilter] = useState("");
   useEffect(() => {
     loadAll();
   }, []);
+  const safeJson = async (res) => {
+  if (!res.ok) {
+    console.error("API Error:", res.status);
+    return [];
+  }
+
+  const text = await res.text();
+  return text ? JSON.parse(text) : [];
+};
 
   const loadAll = async () => {
+    const safeJson = async (res) => {
+  try {
+    if (!res.ok) {
+      console.error("API Error:", res.status);
+      return [];
+    }
+
+    const contentType = res.headers.get("content-type");
+
+    // ✅ If no JSON response, return empty
+    if (!contentType || !contentType.includes("application/json")) {
+      return [];
+    }
+
+    return await res.json();
+
+  } catch (err) {
+    console.error("Safe JSON Error:", err);
+    return [];
+  }
+};
     const token = authService.getToken();
 
 const [fb, c, s, i, stu] = await Promise.all([
@@ -67,7 +97,7 @@ const [fb, c, s, i, stu] = await Promise.all([
   courseService.getAllCourses(),
   fetch("http://localhost:8080/api/service", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
   fetch("http://localhost:8080/api/instructor", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-  fetch("http://localhost:8080/api/users/students", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json())
+ 
 ]);
 
 setFeedbacks(fb || []);

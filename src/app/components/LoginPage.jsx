@@ -76,28 +76,45 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+  <div className="min-h-screen flex">
 
-      <Card className="w-full max-w-md shadow-xl">
+    {/* LEFT SIDE (Branding) */}
+    <div className="hidden md:flex w-1/2 bg-indigo-600 text-white flex-col justify-center items-center p-10">
 
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 bg-indigo-600 rounded-full shadow-md">
-              <GraduationCap className="h-8 w-8 text-white" />
-            </div>
+      <div className="text-center space-y-4">
+        <div className="flex justify-center">
+          <div className="p-4 bg-white/20 rounded-full">
+            <GraduationCap className="h-10 w-10" />
           </div>
+        </div>
 
-          <CardTitle className="text-xl font-bold">
-            Student Feedback System
+        <h1 className="text-3xl font-bold">
+          Student Feedback System
+        </h1>
+
+        <p className="text-indigo-100 max-w-sm">
+          Share your thoughts, improve courses, and make learning better for everyone.
+        </p>
+      </div>
+
+    </div>
+
+    {/* RIGHT SIDE (Form) */}
+    <div className="flex flex-1 items-center justify-center bg-gray-50 px-4">
+
+      <Card className="w-full max-w-md shadow-xl rounded-2xl border-0">
+
+        <CardHeader className="text-center space-y-2">
+          <CardTitle className="text-2xl font-semibold">
+            Welcome Back 👋
           </CardTitle>
-
           <CardDescription>
-            Sign in to continue
+            Login to your account
           </CardDescription>
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-5">
 
             {/* EMAIL */}
             <div className="space-y-2">
@@ -107,6 +124,7 @@ export default function LoginPage() {
                 placeholder="email@university.edu"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="h-11 rounded-lg"
                 required
               />
             </div>
@@ -119,50 +137,60 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="h-11 rounded-lg"
                 required
               />
             </div>
 
-            {/* CAPTCHA (optional for now) */}
+            {/* CAPTCHA */}
             <div className="flex justify-center">
               <ReCAPTCHA
-                sitekey="6LeHYKQsAAAAAP_qwkMTBqJhfJzGUT4BbyVHwvbM"
+                sitekey="6Ldzaa0sAAAAADltDvlf8rb-6RxkflQ_2fLuh_uv"
                 onChange={(token) => setCaptchaToken(token)}
               />
             </div>
 
             {/* ERROR */}
             {error && (
-              <p className="text-sm text-red-600 text-center">{error}</p>
+              <p className="text-sm text-red-500 text-center">{error}</p>
             )}
 
             {/* BUTTON */}
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full h-11 text-base rounded-lg"
+              disabled={loading}
+            >
               {loading ? "Signing in..." : "Sign In"}
             </Button>
 
-            {/* REGISTER */}
-            <p className="text-center text-sm mt-4">
-              Don’t have an account?{" "}
-              <span
-                className="text-indigo-600 font-medium cursor-pointer hover:underline"
-                onClick={() => navigate("/register")}
-              >
-                Register
-              </span>
-            </p>
-            <p
-  className="text-sm text-blue-600 cursor-pointer mt-2"
-  onClick={() => navigate("/forgot-password")}
->
-  Forgot Password?
-</p>
+            {/* LINKS */}
+            <div className="text-center text-sm space-y-2">
 
+              <p>
+                Don’t have an account?{" "}
+                <span
+                  className="text-indigo-600 font-medium cursor-pointer hover:underline"
+                  onClick={() => navigate("/register")}
+                >
+                  Register
+                </span>
+              </p>
+
+              <p
+                className="text-blue-600 cursor-pointer hover:underline"
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forgot Password?
+              </p>
+
+            </div>
 
           </form>
         </CardContent>
 
       </Card>
     </div>
-  );
+  </div>
+);
 }

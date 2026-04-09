@@ -136,173 +136,206 @@ useEffect(() => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50">
+ return (
+  <div className="min-h-screen bg-gray-100 flex">
 
-      {/* HEADER */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-3xl mx-auto px-4 py-4">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/student')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
-          </Button>
-        </div>
-      </header>
+    {/* SIDEBAR */}
+    <div className="hidden md:flex w-64 bg-white shadow-lg flex-col p-6">
+      <h2 className="text-xl font-bold mb-6">Feedback Panel</h2>
 
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <Button
+        variant="ghost"
+        className="justify-start"
+        onClick={() => navigate('/student')}
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Dashboard
+      </Button>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Institutional Services Feedback</CardTitle>
-            <CardDescription>
-              Help us improve campus facilities and services
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
-              {/* SERVICE SELECTION */}
-              <div className="space-y-2">
-                <Label>Select Service</Label>
-
-                <Controller
-                  name="serviceId"
-                  control={control}
-                  rules={{ required: "Please select a service" }}
-                  render={({ field }) => (
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Choose a service category" />
-                      </SelectTrigger>
-
-                      <SelectContent>
-                        {services.map((service) => (
-                          <SelectItem key={service.id} value={service.id.toString()}>
-                            {service.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-
-                {errors.serviceId && (
-                  <p className="text-sm text-red-600">
-                    {errors.serviceId.message}
-                  </p>
-                )}
-              </div>
-
-              {/* SERVICE DETAILS */}
-              {selectedServiceId && (
-                <div className="p-4 bg-gray-50 rounded-lg border">
-                  {(() => {
-                    const service = services.find(
-                      (s) => s.id.toString() === selectedServiceId
-                    );
-
-                    return service ? (
-                      <div className="space-y-2 text-sm">
-                        <div className="font-medium text-gray-900">
-                          {service.name}
-                        </div>
-                        <p className="text-gray-600">
-                          {service.description}
-                        </p>
-                      </div>
-                    ) : null;
-                  })()}
-                </div>
-              )}
-
-              {/* RATING */}
-              <div className="space-y-2">
-                <Label>Overall Rating</Label>
-
-                <Controller
-                  name="rating"
-                  control={control}
-                  rules={{
-                    required: "Please select a rating",
-                    min: { value: 1, message: "Please select a rating" }
-                  }}
-                  render={({ field }) => (
-                    <div className="flex items-center gap-3">
-                      {[1,2,3,4,5].map((star) => (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={() => {
-                            setRatingUI(star);
-                            field.onChange(star);
-                          }}
-                          onMouseEnter={() => setHoveredRating(star)}
-                          onMouseLeave={() => setHoveredRating(0)}
-                        >
-                          <Star
-                            className={`h-8 w-8 ${
-                              star <= (hoveredRating || ratingUI)
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                />
-
-                {errors.rating && (
-                  <p className="text-sm text-red-600">{errors.rating.message}</p>
-                )}
-              </div>
-
-              {/* COMMENTS */}
-              <div className="space-y-2">
-                <Label>Your Feedback</Label>
-
-                <Controller
-                  name="comments"
-                  control={control}
-                  rules={{
-                    required: "Feedback is required",
-                    validate: (value) =>
-                      value.trim().length >= 10 ||
-                      "Please provide feedback (at least 10 characters)"
-                  }}
-                  render={({ field }) => (
-                    <Textarea {...field} rows={6} />
-                  )}
-                />
-
-                {errors.comments && (
-                  <p className="text-sm text-red-600">
-                    {errors.comments.message}
-                  </p>
-                )}
-              </div>
-
-              {/* BUTTONS */}
-              <div className="flex gap-3">
-                <Button type="button" variant="outline" onClick={() => navigate('/student')}>
-                  Cancel
-                </Button>
-
-                <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
-                </Button>
-              </div>
-
-            </form>
-          </CardContent>
-        </Card>
-
+      <div className="mt-10 text-sm text-gray-500">
+        Help improve campus services by sharing your experience.
       </div>
     </div>
-  );
+
+    {/* MAIN CONTENT */}
+    <div className="flex-1 p-6">
+
+      <div className="max-w-5xl mx-auto space-y-6">
+
+        {/* TITLE */}
+        <div>
+          <h1 className="text-2xl font-bold">Service Feedback</h1>
+          <p className="text-gray-500">
+            Evaluate institutional services and facilities
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+          {/* SECTION 1: SELECT SERVICE */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border space-y-4">
+
+            <h2 className="font-semibold text-lg">Select Service</h2>
+
+            <Controller
+              name="serviceId"
+              control={control}
+              rules={{ required: "Please select a service" }}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="h-12">
+                    <SelectValue placeholder="Choose service..." />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    {services.map((service) => (
+                      <SelectItem
+                        key={service.id}
+                        value={service.id.toString()}
+                      >
+                        {service.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+
+            {errors.serviceId && (
+              <p className="text-sm text-red-500">
+                {errors.serviceId.message}
+              </p>
+            )}
+          </div>
+
+          {/* SECTION 2: SERVICE DETAILS */}
+          {selectedServiceId && (
+            <div className="bg-white p-6 rounded-xl shadow-sm border">
+
+              {(() => {
+                const service = services.find(
+                  (s) => s.id.toString() === selectedServiceId
+                );
+
+                return service ? (
+                  <div className="space-y-4">
+
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-500">Service Name</p>
+                      <p className="font-medium">{service.name}</p>
+                    </div>
+
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-500">Description</p>
+                      <p className="font-medium text-gray-700">
+                        {service.description}
+                      </p>
+                    </div>
+
+                  </div>
+                ) : null;
+              })()}
+
+            </div>
+          )}
+
+          {/* SECTION 3: RATING */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border space-y-4 text-center">
+
+            <h2 className="font-semibold text-lg">Rate Service</h2>
+
+            <Controller
+              name="rating"
+              control={control}
+              rules={{
+                required: "Please select a rating",
+                min: { value: 1, message: "Please select a rating" }
+              }}
+              render={({ field }) => (
+                <div className="flex justify-center gap-4">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => {
+                        setRatingUI(star);
+                        field.onChange(star);
+                      }}
+                      onMouseEnter={() => setHoveredRating(star)}
+                      onMouseLeave={() => setHoveredRating(0)}
+                      className="transition transform hover:scale-125"
+                    >
+                      <Star
+                        className={`h-10 w-10 ${
+                          star <= (hoveredRating || ratingUI)
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            />
+
+            {errors.rating && (
+              <p className="text-sm text-red-500">
+                {errors.rating.message}
+              </p>
+            )}
+          </div>
+
+          {/* SECTION 4: COMMENTS */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border space-y-3">
+
+            <h2 className="font-semibold text-lg">Your Feedback</h2>
+
+            <Controller
+              name="comments"
+              control={control}
+              rules={{
+                required: "Feedback is required",
+                validate: (value) =>
+                  value.trim().length >= 10 ||
+                  "Please provide feedback (at least 10 characters)"
+              }}
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  rows={5}
+                  className="rounded-lg"
+                  placeholder="Write your thoughts about the service..."
+                />
+              )}
+            />
+
+            {errors.comments && (
+              <p className="text-sm text-red-500">
+                {errors.comments.message}
+              </p>
+            )}
+          </div>
+
+          {/* ACTION BUTTONS */}
+          <div className="flex justify-end gap-3">
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate('/student')}
+            >
+              Cancel
+            </Button>
+
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+            </Button>
+
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+);
 }

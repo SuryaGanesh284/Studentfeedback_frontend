@@ -75,135 +75,160 @@ setFeedbacks(myFeedbacks);
     }
   ];
 
-  return (
-    <div className="min-h-screen bg-gray-50">
+ return (
+  <div className="min-h-screen bg-gray-100 flex">
 
-      {/* HEADER */}
-      <header className="bg-white border-b px-6 py-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-bold">Student Dashboard</h1>
-          <p className="text-sm text-gray-500">
-            {user?.email}
-          </p>
-        </div>
+    {/* SIDEBAR */}
+    <div className="hidden md:flex w-64 bg-white shadow-lg flex-col p-6">
 
-        <Button onClick={handleLogout}>
-          <LogOut className="h-4 w-4 mr-2"/>
+      <h2 className="text-xl font-bold mb-8">Student Panel</h2>
+
+      <div className="space-y-3">
+        <Button variant="ghost" className="justify-start">
+          Dashboard
+        </Button>
+
+        <Button
+          variant="ghost"
+          className="justify-start"
+          onClick={() => navigate('/student/feedback/course')}
+        >
+          Course Feedback
+        </Button>
+
+        <Button
+          variant="ghost"
+          className="justify-start"
+          onClick={() => navigate('/student/feedback/instructor')}
+        >
+          Instructor Feedback
+        </Button>
+
+        <Button
+          variant="ghost"
+          className="justify-start"
+          onClick={() => navigate('/student/feedback/services')}
+        >
+          Service Feedback
+        </Button>
+      </div>
+
+      <div className="mt-auto">
+        <Button onClick={handleLogout} className="w-full">
+          <LogOut className="h-4 w-4 mr-2" />
           Logout
         </Button>
-      </header>
+      </div>
 
-      <div className="max-w-5xl mx-auto p-6 space-y-6">
+    </div>
 
-        {/* ================= STATS ================= */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+    {/* MAIN */}
+    <div className="flex-1 p-6 space-y-6">
 
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-sm text-gray-500">Courses</p>
-              <h2 className="text-2xl font-bold">{courses.length}</h2>
-            </CardContent>
-          </Card>
+      {/* TOP BAR */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <p className="text-gray-500 text-sm">{user?.email}</p>
+        </div>
+      </div>
 
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-sm text-gray-500">Feedbacks Given</p>
-              <h2 className="text-2xl font-bold">{feedbacks.length}</h2>
-            </CardContent>
-          </Card>
+      {/* STATS */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
 
-          <Card>
-            <CardContent className="p-4 text-center">
-              <p className="text-sm text-gray-500">Semester</p>
-              <h2 className="text-lg font-semibold">ODD 2026</h2>
-            </CardContent>
-          </Card>
-
+        <div className="bg-white p-6 rounded-xl shadow-sm border text-center">
+          <p className="text-gray-500 text-sm">Courses</p>
+          <h2 className="text-3xl font-bold">{courses.length}</h2>
         </div>
 
-        {/* ================= FEEDBACK ACTIONS ================= */}
-        <div className="grid md:grid-cols-3 gap-4">
-          {feedbackOptions.map((opt, i)=>(
-            <Card
-              key={i}
-              className="cursor-pointer hover:shadow-lg transition"
-              onClick={()=>navigate(opt.path)}
-            >
-              <CardContent className="p-6 text-center space-y-3">
-
-                <div className={`${opt.color} p-3 rounded-full inline-block`}>
-                  <opt.icon className="text-white"/>
-                </div>
-
-                <h3 className="font-semibold">{opt.title}</h3>
-
-                <Button variant="outline" className="w-full">
-                  Start
-                </Button>
-
-              </CardContent>
-            </Card>
-          ))}
+        <div className="bg-white p-6 rounded-xl shadow-sm border text-center">
+          <p className="text-gray-500 text-sm">Feedbacks</p>
+          <h2 className="text-3xl font-bold">{feedbacks.length}</h2>
         </div>
 
-        {/* ================= RECENT FEEDBACK ================= */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Feedback</CardTitle>
-          </CardHeader>
-
-          <CardContent>
-
-            {loading ? (
-              <p className="text-gray-500">Loading...</p>
-            ) : feedbacks.length === 0 ? (
-              <p className="text-gray-500">No feedback submitted</p>
-            ) : (
-              feedbacks.slice(-5).reverse().map(f => (
-                <div key={f.id} className="border-b py-2 text-sm">
-                  <span className="font-medium">{f.targetName}</span>
-                  {" "}⭐ {f.rating}
-                </div>
-              ))
-            )}
-
-          </CardContent>
-        </Card>
-
-        {/* ================= COURSES ================= */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Available Courses</CardTitle>
-          </CardHeader>
-
-          <CardContent>
-
-            {loading ? (
-              <p className="text-gray-500">Loading courses...</p>
-            ) : courses.length === 0 ? (
-              <p className="text-gray-500">No courses available</p>
-            ) : (
-              <div className="space-y-2">
-                {courses.map(c => (
-                  <div
-                    key={c.id}
-                    className="border p-3 rounded hover:bg-gray-50"
-                  >
-                    <div className="font-medium">
-                      {c.name} ({c.code || "N/A"})
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {c.instructor || "N/A"} • {c.department || "N/A"}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-          </CardContent>
-        </Card>
+        <div className="bg-white p-6 rounded-xl shadow-sm border text-center">
+          <p className="text-gray-500 text-sm">Semester</p>
+          <h2 className="text-lg font-semibold">ODD 2026</h2>
+        </div>
 
       </div>
+
+      {/* QUICK ACTIONS */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {feedbackOptions.map((opt, i) => (
+          <div
+            key={i}
+            onClick={() => navigate(opt.path)}
+            className="bg-white p-6 rounded-xl shadow-sm border cursor-pointer hover:shadow-md transition"
+          >
+            <div className="flex flex-col items-center space-y-3">
+
+              <div className={`${opt.color} p-3 rounded-full`}>
+                <opt.icon className="text-white" />
+              </div>
+
+              <h3 className="font-semibold">{opt.title}</h3>
+
+              <Button variant="outline" className="w-full">
+                Start
+              </Button>
+
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* TWO COLUMN SECTION */}
+      <div className="grid md:grid-cols-2 gap-6">
+
+        {/* RECENT FEEDBACK */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border">
+          <h2 className="font-semibold mb-4">Recent Feedback</h2>
+
+          {loading ? (
+            <p className="text-gray-500">Loading...</p>
+          ) : feedbacks.length === 0 ? (
+            <p className="text-gray-500">No feedback submitted</p>
+          ) : (
+            feedbacks.slice(-5).reverse().map(f => (
+              <div key={f.id} className="border-b py-2 text-sm flex justify-between">
+                <span>{f.targetName}</span>
+                <span>⭐ {f.rating}</span>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* COURSES */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border">
+          <h2 className="font-semibold mb-4">Courses</h2>
+
+          {loading ? (
+            <p className="text-gray-500">Loading...</p>
+          ) : courses.length === 0 ? (
+            <p className="text-gray-500">No courses available</p>
+          ) : (
+            <div className="space-y-3">
+              {courses.map(c => (
+                <div
+                  key={c.id}
+                  className="p-3 rounded-lg border hover:bg-gray-50"
+                >
+                  <div className="font-medium">
+                    {c.name} ({c.code || "N/A"})
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {c.instructor || "N/A"} • {c.department || "N/A"}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+      </div>
+
     </div>
-  );
+  </div>
+);
 }
