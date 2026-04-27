@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 
 import { authService } from '../services/authService';
 import { courseService } from "../services/courseService";
+import { apiUrl } from "../config/api";
 
 import { LogOut, BookOpen, UserCheck, Building2 } from 'lucide-react';
 
@@ -28,7 +29,7 @@ export default function StudentDashboard() {
         setCourses(courseRes || []);
 
         // Feedbacks (NO FILTER → FIXED ISSUE)
-        const fbRes = await fetch("http://localhost:8080/api/feedback");
+        const fbRes = await fetch(apiUrl("/api/feedback"));
         const fbData = await fbRes.json();
        const myFeedbacks = fbData.filter(
   (f) => f.studentName === user?.email

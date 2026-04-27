@@ -1,6 +1,7 @@
 import { authService } from "./authService";
+import { apiUrl } from "../config/api";
 
-const API_URL = "http://localhost:8080/api/course";
+const API_URL = apiUrl("/api/course");
 
 export const courseService = {
 

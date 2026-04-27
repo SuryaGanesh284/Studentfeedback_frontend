@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 import { authService } from '../services/authService';
 import { courseService } from '../services/courseService';
+import { apiUrl } from '../config/api';
 
 import { ArrowLeft, Star } from 'lucide-react';
 import { toast } from 'sonner';
@@ -84,7 +85,7 @@ export default function CourseFeedback() {
         status: 'SUBMITTED'
       };
 
-      await fetch("http://localhost:8080/api/feedback", {
+      await fetch(apiUrl("/api/feedback"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

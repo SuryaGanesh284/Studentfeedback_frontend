@@ -1,4 +1,6 @@
-const BASE_URL = "http://localhost:8080/api/auth";
+import { apiUrl } from "../config/api";
+
+const BASE_URL = apiUrl("/api/auth");
 const TOKEN_KEY = "token";
 
 export const authService = {

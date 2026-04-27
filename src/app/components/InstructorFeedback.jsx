@@ -9,6 +9,7 @@ import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 import { authService } from '../services/authService';
+import { apiUrl } from '../config/api';
 
 import { ArrowLeft, Star } from 'lucide-react';
 import { toast } from 'sonner';
@@ -31,7 +32,7 @@ export default function InstructorFeedback() {
       try {
         const token = authService.getToken();
 
-        const res = await fetch("http://localhost:8080/api/instructor", {
+        const res = await fetch(apiUrl("/api/instructor"), {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -95,7 +96,7 @@ export default function InstructorFeedback() {
         status: 'SUBMITTED'
       };
 
-      await fetch("http://localhost:8080/api/feedback", {
+      await fetch(apiUrl("/api/feedback"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

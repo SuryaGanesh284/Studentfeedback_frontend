@@ -9,6 +9,7 @@ import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 import { authService } from '../services/authService';
+import { apiUrl } from '../config/api';
 
 import { ArrowLeft, Star } from 'lucide-react';
 import { toast } from 'sonner';
@@ -33,7 +34,7 @@ useEffect(() => {
 
       console.log("TOKEN:", token); // 🔍 debug
 
-      const res = await fetch("http://localhost:8080/api/service", {
+      const res = await fetch(apiUrl("/api/service"), {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -111,7 +112,7 @@ useEffect(() => {
         status: 'SUBMITTED'
       };
 
-      await fetch("http://localhost:8080/api/feedback", {
+      await fetch(apiUrl("/api/feedback"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

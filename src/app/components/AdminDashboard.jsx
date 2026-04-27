@@ -26,6 +26,7 @@ import { Input } from "./ui/input";
 
 import { authService } from "../services/authService";
 import { courseService } from "../services/courseService";
+import { apiUrl } from "../config/api";
 
 export default function AdminDashboard() {
 
@@ -93,10 +94,10 @@ const [typeFilter, setTypeFilter] = useState("");
     const token = authService.getToken();
 
 const [fb, c, s, i, stu] = await Promise.all([
-  fetch("http://localhost:8080/api/feedback").then(r => r.json()),
+  fetch(apiUrl("/api/feedback")).then(r => r.json()),
   courseService.getAllCourses(),
-  fetch("http://localhost:8080/api/service", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-  fetch("http://localhost:8080/api/instructor", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+  fetch(apiUrl("/api/service"), { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+  fetch(apiUrl("/api/instructor"), { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
  
 ]);
 
@@ -118,7 +119,7 @@ setStudents(stu || []);
 
   const addService = async () => {
     const token = authService.getToken();
-    await fetch("http://localhost:8080/api/service", {
+    await fetch(apiUrl("/api/service"), {
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -132,7 +133,7 @@ setStudents(stu || []);
 
   const addInstructor = async () => {
     const token = authService.getToken();
-    await fetch("http://localhost:8080/api/instructor", {
+    await fetch(apiUrl("/api/instructor"), {
       method:"POST",
       headers:{
         "Content-Type":"application/json",
@@ -153,7 +154,7 @@ setStudents(stu || []);
 
   const deleteService = async (id) => {
     const token = authService.getToken();
-    await fetch(`http://localhost:8080/api/service/${id}`, {
+    await fetch(apiUrl(`/api/service/${id}`), {
       method:"DELETE",
       headers:{ Authorization:`Bearer ${token}` }
     });
@@ -162,7 +163,7 @@ setStudents(stu || []);
 
   const deleteInstructor = async (id) => {
     const token = authService.getToken();
-    await fetch(`http://localhost:8080/api/instructor/${id}`, {
+    await fetch(apiUrl(`/api/instructor/${id}`), {
       method:"DELETE",
       headers:{ Authorization:`Bearer ${token}` }
     });
