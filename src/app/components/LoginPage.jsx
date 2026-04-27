@@ -5,15 +5,12 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { authService } from '../services/authService';
-import { RECAPTCHA_SITE_KEY } from '../config/api';
 import { GraduationCap } from 'lucide-react';
-import ReCAPTCHA from "react-google-recaptcha";
 
 export default function LoginPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [captchaToken, setCaptchaToken] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -36,19 +33,12 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
-    //🔥 TEMP: disable captcha requirement (backend not using it)
-     if (!captchaToken) {
-       setError("Please verify CAPTCHA");
-       return;
-     }
-
     setLoading(true);
 
     try {
       const token = await authService.login(
         email.trim(),
-        password,
-        captchaToken
+        password
       );
 
       if (token) {
@@ -65,13 +55,11 @@ export default function LoginPage() {
 
       } else {
         setError('Invalid email or password');
-        setCaptchaToken('');
       }
 
     } catch (err) {
       console.error(err);
       setError("Login failed. Try again.");
-      setCaptchaToken('');
     } finally {
       setLoading(false);
     }
@@ -141,14 +129,6 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="h-11 rounded-lg"
                 required
-              />
-            </div>
-
-            {/* CAPTCHA */}
-            <div className="flex justify-center">
-              <ReCAPTCHA
-                sitekey={RECAPTCHA_SITE_KEY}
-                onChange={(token) => setCaptchaToken(token)}
               />
             </div>
 
