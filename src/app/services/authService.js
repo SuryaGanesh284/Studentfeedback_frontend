@@ -42,14 +42,14 @@ export const authService = {
   },
 
   // ================= LOGIN =================
-  login: async (email, password) => {
+  login: async (email, password, captchaToken) => {
     try {
       const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, captchaToken })
       });
 
       if (!response.ok) {

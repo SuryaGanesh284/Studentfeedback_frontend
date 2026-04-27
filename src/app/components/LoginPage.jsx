@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { authService } from '../services/authService';
+import { RECAPTCHA_SITE_KEY } from '../config/api';
 import { GraduationCap } from 'lucide-react';
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -46,7 +47,8 @@ export default function LoginPage() {
     try {
       const token = await authService.login(
         email.trim(),
-        password
+        password,
+        captchaToken
       );
 
       if (token) {
@@ -145,7 +147,7 @@ export default function LoginPage() {
             {/* CAPTCHA */}
             <div className="flex justify-center">
               <ReCAPTCHA
-                sitekey="6Ldzaa0sAAAAADltDvlf8rb-6RxkflQ_2fLuh_uv"
+                sitekey={RECAPTCHA_SITE_KEY}
                 onChange={(token) => setCaptchaToken(token)}
               />
             </div>
